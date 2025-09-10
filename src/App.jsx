@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-const API_Url =
-  "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false";
+import CoinCard from "./components/CoinCard";
+const API_Url = import.meta.env.VITE_API_URL;
 
 const App = () => {
   const [coins, setCoins] = useState([]);
@@ -11,11 +11,12 @@ const App = () => {
     const fetchCoins = async () => {
       try {
         setLoading(true);
-        const res = await fetch(API_Url);
+        const res = await fetch(
+          `${API_Url}&order=market_cap_desc&per_page=10&page=1&sparkline=false`
+        );
         if (!res.ok) throw new Error("failed to fetch data");
         const data = await res.json();
         if (data) {
-          console.log(data);
           setCoins(data);
           setLoading(false);
         }
@@ -35,14 +36,9 @@ const App = () => {
 
       {!loading && !error && (
         <main className="grid">
-          {coins.map((coin)=>{
-            <div className="coin-card" key={coin.id}>
-              <div className="coin-header">
-                <img src="" alt="" />
-              </div>
-
-            </div>
-          })}
+          {coins.map((coin) => (
+            <CoinCard coin={coin} />
+          ))}
         </main>
       )}
     </div>
