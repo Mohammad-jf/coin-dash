@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CoinCard from "./components/CoinCard";
 import LimitSelector from "./components/LimitSelector";
 import FilterInput from "./components/FilterInput";
+import SortSelector from "./components/SortSelector";
 const API_URL = import.meta.env.VITE_COINS_API_URL;
 
 const App = () => {
@@ -10,13 +11,14 @@ const App = () => {
   const [error, setError] = useState(null);
   const [limit, setLimit] = useState(10);
   const [filter, setFilter] = useState("");
+  const [sortBy, setSortBy] = useState("market_cap_desc");
 
   useEffect(() => {
     const fetchCoins = async () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`
+          `${API_URL}&order=${sortBy}&per_page=${limit}&page=1&sparkline=false`
         );
         if (!res.ok) throw new Error("failed to fetch data");
         const data = await res.json();
@@ -31,7 +33,7 @@ const App = () => {
     };
 
     fetchCoins();
-  }, [limit]);
+  }, [limit, sortBy]);
 
   const filteredCoins = coins.filter(
     (coin) =>
@@ -47,6 +49,7 @@ const App = () => {
       <div className="top-controls">
         <FilterInput filter={filter} onFilterChange={setFilter} />
         <LimitSelector limit={limit} setLimit={setLimit} />
+        <SortSelector sortBy={sortBy} onSortChange={setSortBy} />
       </div>
 
       {!loading && !error && (
