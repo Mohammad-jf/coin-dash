@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router";
 import HomePage from "./pages/HomePage";
 const API_URL = import.meta.env.VITE_COINS_API_URL;
+import AboutPage from "./pages/AboutPage";
+import Header from "./components/Header";
+import NotFoundPage from "./pages/not-found";
+import CoinDetailPage from "./pages/CoinDetailPage";
 
 const App = () => {
   const [coins, setCoins] = useState([]);
@@ -35,6 +39,7 @@ const App = () => {
 
   return (
     <>
+      <Header />
       <Routes>
         <Route
           path="/"
@@ -52,6 +57,11 @@ const App = () => {
             />
           }
         />
+
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/coin/:id" element={<CoinDetailPage />} />
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
